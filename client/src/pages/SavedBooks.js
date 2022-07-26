@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
-import { useQuery, useMutation } from "@apollo/client";
-import { REMOVE_BOOK } from "../utils/mutations";
-import { GET_ME } from "../utils/queries"
+import { useQuery, useMutation } from '@apollo/client';
+import { REMOVE_BOOK } from '../utils/mutations';
+import { GET_ME } from '../utils/queries';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
@@ -10,9 +10,8 @@ const SavedBooks = () => {
   const [removeBook, {error}] = useMutation(REMOVE_BOOK);
   const { loading, data } = useQuery(GET_ME);
   const userData = data?.me || {};
-  
 
-    // create function that accepts the book's mongo _id value as param and deletes the book from the database
+  // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -21,18 +20,16 @@ const SavedBooks = () => {
     }
 
     try {
-      const {data} = await removeBook ({
+      const { data } = await removeBook({
         variables: { bookId },
-      },
-      [error]);
+      }, [error]);
 
       removeBookId(bookId);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
-  // if data isn't here yet, say so
   if (loading) {
     return <h2>LOADING...</h2>;
   }
